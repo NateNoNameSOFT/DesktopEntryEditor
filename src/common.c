@@ -1,6 +1,8 @@
 
 #include "../include/common.h"
 
+char *DEPATH = NULL;
+
 void *xcalloc(size_t multiplier, size_t size) {
   void *result = calloc(multiplier, size);
   if (result == NULL)

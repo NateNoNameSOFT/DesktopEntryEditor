@@ -3,14 +3,24 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-#define DEPATH "~/.local/share/applications/"
+extern char *DEPATH;
+
+#define INIT_DEPATH                                                            \
+  do {                                                                         \
+    DEPATH = xmalloc(sizeof(getenv("HOME")) +                                  \
+                     sizeof("/.local/share/applications/"));                   \
+    sprintf(DEPATH, "%s%s", getenv("HOME"), "/.local/share/applications/");    \
+  } while (0);
 
 #define CLEAR "\e[1;1H\e[2J"
 
 #define FLUSH_STDIN getchar()
 
 #define WAIT_FOR_INPUT getchar()
+
+#define REMOVE_NEWLINE(str) str[strcspn(str, "\n")] = '\0'
 
 #ifdef DEBON
 /*
