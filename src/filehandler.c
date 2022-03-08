@@ -29,6 +29,7 @@ void file_new(void) {
   size_t buf_size = 255;
   char *filename = xmalloc(buf_size * sizeof(char));
   char *buf = NULL;
+  char *tmp = NULL;
   char random[4] = {};
 
   // generate random 3 character string so we dont accidently edit a file
@@ -57,7 +58,7 @@ void file_new(void) {
                                               sizeof(random) +
                                               sizeof(".desktop"));
 
-  char *tmp = xmalloc(sizeof(filename));
+  tmp = xmalloc(sizeof(filename));
   strcpy(tmp, filename);
 
   sprintf(filename, "%s%s%s%s", DEPATH, tmp, random, ".desktop");
@@ -79,6 +80,8 @@ void file_new(void) {
 
   printf("What would you like this desktop entry to execute?\n");
 
+  FLUSH_STDIN;
+
   buf = xmalloc(buf_size * sizeof(char));
 
   getline(&buf, &buf_size, stdin);
@@ -90,6 +93,16 @@ void file_new(void) {
   buf = realloc(buf, sizeof(buf));
 
   fprintf(fp, "%s%s%s", "Exec=", buf, "\n");
+
+  printf("Would you like that to be marked as executable (chmod a+x)?");
+  if (yes_or_no(getchar())) {
+    tmp = xmalloc(sizeof(buf) + sizeof("chmod a+x") + 2);
+    sprintf(tmp, "%s%s", "chmod a+x ", buf);
+    system(tmp);
+    free(tmp);
+  }
+
+  free(buf);
 
   printf("What would you like this desktop entrys icon (path) to be?\n");
 

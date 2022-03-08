@@ -19,9 +19,14 @@
 int main(int argc, char *argv[]) {
 
   // TODO handle arguments instead of options
+  // in arguments add quickicon option DEE -q /opt/app.appimage will create a
+  // desktop entry named app the executes /opt/app.appimage
 
   char choice = '\0';
   signal(SIGINT, handle_exit);
+
+  INIT_DEPATH;
+  puts(DEPATH);
 
   while (1) {
     choice = '\0';
