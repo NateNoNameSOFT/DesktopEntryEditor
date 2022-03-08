@@ -1,6 +1,7 @@
 #ifndef COMMON_H_
 #define COMMON_H_
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -53,5 +54,7 @@ extern char *DEPATH;
 
 void *xcalloc(size_t multiplier, size_t size);
 void *xmalloc(size_t size);
+
+bool yes_or_no(char ch);
 
 #endif // COMMON_H_

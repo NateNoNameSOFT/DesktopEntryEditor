@@ -16,3 +16,17 @@ void *xmalloc(size_t size) {
     ERROR("error: unable to allocate memory!");
   return result;
 }
+
+bool yes_or_no(char ch) {
+  switch (ch) {
+  case '\n':
+  case 'Y':
+  case 'y':
+    return true;
+  case 'N':
+  case 'n':
+    return false;
+  default:
+    return false;
+  }
+}
