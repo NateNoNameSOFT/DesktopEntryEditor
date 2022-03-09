@@ -1,12 +1,17 @@
 #include "../include/filehandler.h"
 
-void file_remove(void) {
+void file_remove(char *file) {
   size_t filename_size = 255;
   char *filename = xmalloc(filename_size * sizeof(char));
 
-  puts("Which Desktop Entry Would You Like to Remove?");
-  FLUSH_STDIN;
-  getline(&filename, &filename_size, stdin);
+  if (file != NULL)
+    strcpy(filename, file);
+
+  if (file == NULL) {
+	puts("Which Desktop Entry Would You Like to Remove?");
+	FLUSH_STDIN;
+	getline(&filename, &filename_size, stdin);
+  }
 
   // resize memory
   filename = (char *)realloc(filename, sizeof(filename) + sizeof(DEPATH));
@@ -70,7 +75,7 @@ void file_new(void) {
   if (!(fp = fopen(filename, "w+")))
     ERROR("Could not open new desktop entry file\n");
 
-  free(filename);
+  // dont free filename
 
   fputs("[Desktop Entry]\n", fp);
 
@@ -80,7 +85,7 @@ void file_new(void) {
 
   printf("What would you like this desktop entry to execute?\n");
 
-  FLUSH_STDIN;
+  // FLUSH_STDIN;
 
   buf = xmalloc(buf_size * sizeof(char));
 
@@ -94,7 +99,7 @@ void file_new(void) {
 
   fprintf(fp, "%s%s%s", "Exec=", buf, "\n");
 
-  printf("Would you like that to be marked as executable (chmod a+x)?");
+  printf("Would you like that to be marked as executable y/n (chmod a+x)?: ");
   if (yes_or_no(getchar())) {
     tmp = xmalloc(sizeof(buf) + sizeof("chmod a+x") + 2);
     sprintf(tmp, "%s%s", "chmod a+x ", buf);
@@ -106,7 +111,37 @@ void file_new(void) {
 
   printf("What would you like this desktop entrys icon (path) to be?\n");
 
-  printf("\n--Additional Options--\n");
+  FLUSH_STDIN;
+
+  buf = xmalloc(buf_size * sizeof(char));
+
+  getline(&buf, &buf_size, stdin);
+  REMOVE_NEWLINE(buf);
+
+  // pack mem
+  buf = realloc(buf, sizeof(buf));
+
+  fprintf(fp, "%s%s", "Icon=", buf);
+
+  // printf("\n--Additional Options--\n");
+
+  printf("Is this correct?\n");
+
+  printf("\n**********\n");
+  rewind(fp);
+  char ch = fgetc(fp);
+  while ((ch = fgetc(fp)) != EOF)
+    printf("%c", ch);
+  printf("\n**********\n");
+
+  printf("y/n: ");
+  if (!yes_or_no(getchar())) {
+    puts("File removed\n");
+    remove(filename);
+  }
+
+  free(filename);
+  fclose(fp);
 }
 
 void file_edit(void) {}
