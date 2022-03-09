@@ -8,7 +8,7 @@
 #include <string.h>
 #include <time.h>
 
-void file_remove(void);
+void file_remove(char *file);
 void file_new(void);
 void file_edit(void);
 void file_list(void);

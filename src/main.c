@@ -28,6 +28,27 @@ int main(int argc, char *argv[]) {
   INIT_DEPATH;
   puts(DEPATH);
 
+  if (argc > 1) {
+    if (argv[1][0] == '-') {
+      switch (argv[1][1]) {
+      case 'n':
+
+        break;
+      case 'e':
+        break;
+      case 'r':
+        file_remove(argv[2]);
+        break;
+      case 'l':
+        file_list();
+        break;
+      }
+      exit(EXIT_SUCCESS);
+    } else {
+      ERROR("Usage: DEE -option change\n");
+    }
+  }
+
   while (1) {
     choice = '\0';
     printf("Which Operation Would You Like to Perform?\n"
@@ -48,7 +69,7 @@ int main(int argc, char *argv[]) {
       file_edit();
       break;
     case REMOVE:
-      file_remove();
+      file_remove(NULL);
       break;
     case LIST:
       file_list();
